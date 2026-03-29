@@ -1,11 +1,11 @@
 package pool
 
 import (
-	"atomic"
 	"fmt"
 	"net/http"
 	"net/url"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
