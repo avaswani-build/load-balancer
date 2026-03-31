@@ -43,8 +43,13 @@ func (p *ServerPool) AddBackend(b *Backend) {
 }
 
 func (p *ServerPool) Next() *Backend {
-	next := p.nextIndex
+	if len(p.backends) == 0 {
+		return nil
+	}
+
+	next := p.nextIndex()
 	loop := len(p.backends)
+
 	for i := 0; i < loop; i++ {
 		idx := (next + i) % loop
 		if p.backends[idx].IsAlive() {
