@@ -2,18 +2,17 @@ package pool
 
 import (
 	"fmt"
-	"net/http"
+	"net/http/httputil"
 	"net/url"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 type Backend struct {
-	URL    *url.URL
-	Alive  bool
-	mux    sync.RWMutex
-	Client *http.Client
+	URL   *url.URL
+	Alive bool
+	mux   sync.RWMutex
+	Proxy *httputil.ReverseProxy
 }
 
 type ServerPool struct {
@@ -31,9 +30,9 @@ func NewBackend(rawURL string) (*Backend, error) {
 		return nil, fmt.Errorf("invalid backend URL: %w", err)
 	}
 	b := &Backend{
-		URL:    u,
-		Alive:  true,
-		Client: &http.Client{Timeout: 5 * time.Second},
+		URL:   u,
+		Alive: true,
+		Proxy: httputil.NewSingleHostReverseProxy(u),
 	}
 	return b, nil
 }
