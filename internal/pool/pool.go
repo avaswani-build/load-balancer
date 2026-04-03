@@ -16,12 +16,12 @@ type Backend struct {
 }
 
 type ServerPool struct {
-	backends []*Backend
-	current  uint64
+	Backends []*Backend
+	Current  uint64
 }
 
 func (p *ServerPool) nextIndex() int {
-	return int(atomic.AddUint64(&p.current, uint64(1)) % uint64(len(p.backends)))
+	return int(atomic.AddUint64(&p.Current, uint64(1)) % uint64(len(p.Backends)))
 }
 
 func NewBackend(rawURL string) (*Backend, error) {
@@ -38,24 +38,24 @@ func NewBackend(rawURL string) (*Backend, error) {
 }
 
 func (p *ServerPool) AddBackend(b *Backend) {
-	p.backends = append(p.backends, b)
+	p.Backends = append(p.Backends, b)
 }
 
 func (p *ServerPool) Next() *Backend {
-	if len(p.backends) == 0 {
+	if len(p.Backends) == 0 {
 		return nil
 	}
 
 	next := p.nextIndex()
-	loop := len(p.backends)
+	loop := len(p.Backends)
 
 	for i := 0; i < loop; i++ {
 		idx := (next + i) % loop
-		if p.backends[idx].IsAlive() {
+		if p.Backends[idx].IsAlive() {
 			if i != 0 {
-				atomic.StoreUint64(&p.current, uint64(idx))
+				atomic.StoreUint64(&p.Current, uint64(idx))
 			}
-			return p.backends[idx]
+			return p.Backends[idx]
 		}
 	}
 	return nil
