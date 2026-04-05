@@ -11,9 +11,13 @@ A learning project to build an HTTP load balancer in Go from scratch.
 ## Current Status
 - [x] Project scaffold
 - [x] Basic HTTP server responding on `:8080`
-- [ ] Two test backend servers
-- [ ] Round-robin backend selection
-- [ ] Request forwarding
+- [x] Two test backend servers
+- [x] Round-robin backend selection
+- [x] Request forwarding
+- [x] Weighted Round-robin
+- [ ] Selector Interface
+- [ ] Least Connections
+- [ ] IP Hashing
 - [ ] Health checks
 - [ ] Metrics endpoint
 
