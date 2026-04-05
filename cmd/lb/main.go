@@ -10,13 +10,13 @@ import (
 
 func main() {
 	sp := pool.ServerPool{}
-	b, err := pool.NewBackend("http://localhost:9001")
+	b, err := pool.NewBackend("http://localhost:9001", 3)
 	if err != nil {
 		panic(err)
 	}
 	sp.AddBackend(b)
 
-	b, err = pool.NewBackend("http://localhost:9002")
+	b, err = pool.NewBackend("http://localhost:9002", 1)
 	if err != nil {
 		panic(err)
 	}

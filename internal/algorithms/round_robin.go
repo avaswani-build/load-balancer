@@ -15,11 +15,11 @@ func Next(p *pool.ServerPool) *pool.Backend {
 		return nil
 	}
 
-	next := nextIndex(p)
-	loop := len(p.Backends)
+	start := nextIndex(p)
+	count := len(p.Backends)
 
-	for i := 0; i < loop; i++ {
-		idx := (next + i) % loop
+	for i := 0; i < count; i++ {
+		idx := (start + i) % count
 		if p.Backends[idx].IsAlive() {
 			if i != 0 {
 				atomic.StoreUint64(&p.Current, uint64(idx))

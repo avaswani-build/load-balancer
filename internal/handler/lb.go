@@ -9,8 +9,9 @@ import (
 )
 
 func LB(sp *pool.ServerPool) http.HandlerFunc {
+	ws := algorithms.NewWeightedSelection(sp.Backends)
 	return func(w http.ResponseWriter, r *http.Request) {
-		peer := algorithms.Next(sp)
+		peer := algorithms.WeightedNext(ws, sp)
 		if peer == nil {
 			http.Error(w, "No backend available", http.StatusServiceUnavailable)
 			return
