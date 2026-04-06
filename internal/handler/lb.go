@@ -8,10 +8,9 @@ import (
 	"github.com/avaswani-build/load-balancer/internal/pool"
 )
 
-func LB(sp *pool.ServerPool) http.HandlerFunc {
-	ws := algorithms.NewWeightedSelection(sp.Backends)
+func LB(sp *pool.ServerPool, selector algorithms.Selector) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		peer := algorithms.WeightedNext(ws, sp)
+		peer := selector.Next(r, sp)
 		if peer == nil {
 			http.Error(w, "No backend available", http.StatusServiceUnavailable)
 			return

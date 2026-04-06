@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/avaswani-build/load-balancer/internal/algorithms"
 	"github.com/avaswani-build/load-balancer/internal/handler"
 	"github.com/avaswani-build/load-balancer/internal/pool"
 )
@@ -22,8 +23,8 @@ func main() {
 	}
 	sp.AddBackend(b)
 
-	//Always use NewServeMux for production
-	http.DefaultServeMux.HandleFunc("/", handler.LB(&sp))
+	selector := algorithms.NewWeightedRoundRobin(sp.Backends)
+	http.DefaultServeMux.HandleFunc("/", handler.LB(&sp, selector))
 
 	http.ListenAndServe(":8080", http.DefaultServeMux)
 	log.Println("Load Balancer running on :8080")

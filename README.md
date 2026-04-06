@@ -15,7 +15,7 @@ A learning project to build an HTTP load balancer in Go from scratch.
 - [x] Round-robin backend selection
 - [x] Request forwarding
 - [x] Weighted Round-robin
-- [ ] Selector Interface
+- [x] Selector Interface
 - [ ] Least Connections
 - [ ] IP Hashing
 - [ ] Health checks
