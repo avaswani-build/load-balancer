@@ -23,7 +23,7 @@ func main() {
 	}
 	sp.AddBackend(b)
 
-	selector := algorithms.NewWeightedRoundRobin(sp.Backends)
+	selector := algorithms.NewIPHash()
 	http.DefaultServeMux.HandleFunc("/", handler.LB(&sp, selector))
 
 	http.ListenAndServe(":8080", http.DefaultServeMux)
