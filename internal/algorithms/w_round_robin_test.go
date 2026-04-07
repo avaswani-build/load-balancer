@@ -184,3 +184,32 @@ func TestWeightedRoundRobinNext_SkipDeadBackendsRatio2(t *testing.T) {
 		t.Fatalf("fourth cycle: got %p, want %p", cycle4, b3)
 	}
 }
+
+func TestNewWeightedRoundRobin_BuildsIndices(t *testing.T) {
+	b1 := &pool.Backend{
+		Alive:  true,
+		Weight: 3,
+	}
+	b2 := &pool.Backend{
+		Alive:  true,
+		Weight: 1,
+	}
+	b3 := &pool.Backend{
+		Alive:  true,
+		Weight: 2,
+	}
+
+	wrr := NewWeightedRoundRobin([]*pool.Backend{b1, b2, b3})
+
+	want := []int{0, 0, 0, 1, 2, 2}
+
+	if len(wrr.Indices) != len(want) {
+		t.Fatalf("indices length: got %d, want %d", len(wrr.Indices), len(want))
+	}
+
+	for i := range want {
+		if wrr.Indices[i] != want[i] {
+			t.Fatalf("index %d: got %d, want %d", i, wrr.Indices[i], want[i])
+		}
+	}
+}
