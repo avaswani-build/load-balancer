@@ -54,7 +54,7 @@ func (wrr *WeightedRoundRobin) Next(_ *http.Request, p *pool.ServerPool) *pool.B
 
 		if p.Backends[backendIdx].IsAlive() {
 			if i != 0 {
-				atomic.StoreUint64(&wrr.Current, uint64(pos))
+				atomic.StoreUint64(&wrr.Current, uint64(pos+1))
 			}
 			return p.Backends[backendIdx]
 		}

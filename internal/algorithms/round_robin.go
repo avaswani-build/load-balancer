@@ -14,7 +14,7 @@ func NewRoundRobin() *RoundRobin {
 }
 
 func (rr *RoundRobin) nextIndex(p *pool.ServerPool) int {
-	return int(atomic.AddUint64(&p.Current, 1) % uint64(len(p.Backends)))
+	return int((atomic.AddUint64(&p.Current, 1) - 1) % uint64(len(p.Backends)))
 }
 
 func (rr *RoundRobin) Next(_ *http.Request, p *pool.ServerPool) *pool.Backend {
